@@ -831,165 +831,240 @@
 " onclick="toggleMusic()">🔇</div>
 
 <script>
-// Death Note - "Low of Solipsism" (L's Theme) piano recreation via Web Audio API
-let audioCtx, masterGain, isPlaying = false, loopTimeout;
+// Death Note - "L's Theme A" recreation via Web Audio API
+// Eerie pizzicato strings + haunting melody + dark atmosphere
+let audioCtx, masterGain, isPlaying = false, loopTimeout, allNodes = [];
 
-function createDeathNoteTheme() {
+function stopAllAudio() {
+    if (loopTimeout) { clearTimeout(loopTimeout); loopTimeout = null; }
+    allNodes.forEach(n => { try { n.stop(); } catch(e) {} try { n.disconnect(); } catch(e) {} });
+    allNodes = [];
+    if (audioCtx) {
+        audioCtx.close().catch(() => {});
+        audioCtx = null;
+        masterGain = null;
+    }
+}
+
+function createLThemeA() {
+    stopAllAudio();
+    if (!isPlaying) return;
+    
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
-    masterGain.gain.value = 0.5;
+    masterGain.gain.value = 0.45;
     
-    // Reverb convolver
+    // Reverb
     const convolver = audioCtx.createConvolver();
-    const reverbLen = audioCtx.sampleRate * 2.5;
+    const reverbLen = audioCtx.sampleRate * 3;
     const reverbBuf = audioCtx.createBuffer(2, reverbLen, audioCtx.sampleRate);
     for (let ch = 0; ch < 2; ch++) {
         const d = reverbBuf.getChannelData(ch);
         for (let i = 0; i < reverbLen; i++) {
-            d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / reverbLen, 2.5);
+            d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / reverbLen, 3);
         }
     }
     convolver.buffer = reverbBuf;
     
     const dryGain = audioCtx.createGain();
     const wetGain = audioCtx.createGain();
-    dryGain.gain.value = 0.7;
-    wetGain.gain.value = 0.4;
+    dryGain.gain.value = 0.6;
+    wetGain.gain.value = 0.5;
     
     dryGain.connect(masterGain);
     convolver.connect(wetGain);
     wetGain.connect(masterGain);
     masterGain.connect(audioCtx.destination);
 
-    function playPianoNote(freq, startTime, duration, velocity = 0.3) {
-        // Piano-like tone with harmonics
-        const harmonics = [1, 2, 3, 4, 5, 6];
-        const amplitudes = [1, 0.5, 0.25, 0.15, 0.08, 0.04];
+    // Pizzicato string pluck
+    function playPizzicato(freq, startTime, velocity = 0.25) {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        const filter = audioCtx.createBiquadFilter();
         
-        harmonics.forEach((h, i) => {
-            const osc = audioCtx.createOscillator();
-            const g = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.value = freq * h;
-            
-            const amp = velocity * amplitudes[i];
-            g.gain.setValueAtTime(0, startTime);
-            g.gain.linearRampToValueAtTime(amp, startTime + 0.01);
-            g.gain.exponentialRampToValueAtTime(amp * 0.6, startTime + 0.1);
-            g.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-            
-            osc.connect(g);
-            g.connect(dryGain);
-            g.connect(convolver);
-            osc.start(startTime);
-            osc.stop(startTime + duration + 0.1);
-        });
+        osc.type = 'triangle';
+        osc.frequency.value = freq;
+        osc2.type = 'sine';
+        osc2.frequency.value = freq * 2;
+        
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(freq * 6, startTime);
+        filter.frequency.exponentialRampToValueAtTime(freq * 1.5, startTime + 0.15);
+        
+        g.gain.setValueAtTime(0, startTime);
+        g.gain.linearRampToValueAtTime(velocity, startTime + 0.005);
+        g.gain.exponentialRampToValueAtTime(velocity * 0.3, startTime + 0.08);
+        g.gain.exponentialRampToValueAtTime(0.001, startTime + 0.5);
+        
+        osc.connect(filter);
+        osc2.connect(filter);
+        filter.connect(g);
+        g.connect(dryGain);
+        g.connect(convolver);
+        osc.start(startTime);
+        osc2.start(startTime);
+        osc.stop(startTime + 0.6);
+        osc2.stop(startTime + 0.6);
+        allNodes.push(osc, osc2);
     }
 
-    // Note frequencies
+    // Sustained eerie string
+    function playString(freq, startTime, duration, velocity = 0.12) {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        const vibrato = audioCtx.createOscillator();
+        const vibratoGain = audioCtx.createGain();
+        
+        osc.type = 'sawtooth';
+        osc.frequency.value = freq;
+        osc2.type = 'sawtooth';
+        osc2.frequency.value = freq * 1.002; // Slight detune for richness
+        
+        // Vibrato
+        vibrato.type = 'sine';
+        vibrato.frequency.value = 5;
+        vibratoGain.gain.value = 3;
+        vibrato.connect(vibratoGain);
+        vibratoGain.connect(osc.frequency);
+        vibratoGain.connect(osc2.frequency);
+        
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = freq * 3;
+        filter.Q.value = 1;
+        
+        g.gain.setValueAtTime(0, startTime);
+        g.gain.linearRampToValueAtTime(velocity, startTime + 0.2);
+        g.gain.setValueAtTime(velocity, startTime + duration - 0.3);
+        g.gain.linearRampToValueAtTime(0.001, startTime + duration);
+        
+        osc.connect(filter);
+        osc2.connect(filter);
+        filter.connect(g);
+        g.connect(dryGain);
+        g.connect(convolver);
+        vibrato.start(startTime);
+        osc.start(startTime);
+        osc2.start(startTime);
+        vibrato.stop(startTime + duration + 0.1);
+        osc.stop(startTime + duration + 0.1);
+        osc2.stop(startTime + duration + 0.1);
+        allNodes.push(osc, osc2, vibrato);
+    }
+
+    // Deep bass pulse
+    function playBass(freq, startTime, duration, velocity = 0.18) {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        
+        g.gain.setValueAtTime(0, startTime);
+        g.gain.linearRampToValueAtTime(velocity, startTime + 0.05);
+        g.gain.exponentialRampToValueAtTime(velocity * 0.5, startTime + 0.3);
+        g.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+        
+        osc.connect(g);
+        g.connect(dryGain);
+        osc.start(startTime);
+        osc.stop(startTime + duration + 0.1);
+        allNodes.push(osc);
+    }
+
     const N = {
-        C3: 130.81, D3: 146.83, Eb3: 155.56, E3: 164.81, F3: 174.61, G3: 196.00, Ab3: 207.65, A3: 220.00, Bb3: 233.08, B3: 246.94,
-        C4: 261.63, D4: 293.66, Eb4: 311.13, E4: 329.63, F4: 349.23, G4: 392.00, Ab4: 415.30, A4: 440.00, Bb4: 466.16, B4: 493.88,
+        A2: 110.00, B2: 123.47, C3: 130.81, D3: 146.83, Eb3: 155.56, E3: 164.81, F3: 174.61, 
+        Fsh3: 185.00, G3: 196.00, Ab3: 207.65, A3: 220.00, Bb3: 233.08, B3: 246.94,
+        C4: 261.63, D4: 293.66, Eb4: 311.13, E4: 329.63, F4: 349.23, Fsh4: 369.99, 
+        G4: 392.00, Ab4: 415.30, A4: 440.00, Bb4: 466.16, B4: 493.88,
         C5: 523.25, D5: 587.33, Eb5: 622.25, E5: 659.26, F5: 698.46, G5: 783.99, Ab5: 830.61
     };
 
     function playSequence() {
-        if (!isPlaying) return;
+        if (!isPlaying || !audioCtx) return;
         const t = audioCtx.currentTime + 0.1;
-        const bpm = 70;
-        const beat = 60 / bpm;
-        const h = beat / 2; // half beat
-        const q = beat;     // quarter
-        const dq = beat * 1.5; // dotted quarter
-        const w = beat * 4; // whole
+        const bpm = 80;
+        const q = 60 / bpm;     // quarter note
+        const e = q / 2;        // eighth note
+        const h = q * 2;        // half note
+        const w = q * 4;        // whole note
 
-        // "Low of Solipsism" — L's theme melody (C minor)
-        // Haunting piano melody
-        const melody = [
-            // Bar 1-2: Opening motif
-            [N.G4, 0, q, 0.35],
-            [N.Eb5, q, q, 0.4],
-            [N.D5, q*2, h, 0.35],
-            [N.C5, q*2.5, h, 0.3],
-            [N.D5, q*3, q*2, 0.35],
+        // === L's Theme A: Pizzicato pattern (the iconic plucking) ===
+        // Rhythmic pizzicato ostinato in Am
+        const pizz = [
+            // Bar 1-2: Iconic opening pattern
+            [N.E4, 0], [N.B3, e], [N.E4, e*2], [N.A3, e*3],
+            [N.E4, q*2], [N.B3, q*2+e], [N.E4, q*3], [N.A3, q*3+e],
+            [N.E4, q*4], [N.C4, q*4+e], [N.E4, q*5], [N.A3, q*5+e],
+            [N.E4, q*6], [N.C4, q*6+e], [N.E4, q*7], [N.B3, q*7+e],
             
-            // Bar 3-4
-            [N.G4, q*5, q, 0.35],
-            [N.Eb5, q*6, q, 0.4],
-            [N.D5, q*7, h, 0.35],
-            [N.Eb5, q*7.5, h, 0.3],
-            [N.C5, q*8, q*2, 0.35],
+            // Bar 3-4: Variation
+            [N.E4, q*8], [N.B3, q*8+e], [N.E4, q*9], [N.A3, q*9+e],
+            [N.F4, q*10], [N.C4, q*10+e], [N.E4, q*11], [N.B3, q*11+e],
+            [N.E4, q*12], [N.A3, q*12+e], [N.D4, q*13], [N.A3, q*13+e],
+            [N.E4, q*14], [N.B3, q*14+e], [N.E4, q*15], [N.A3, q*15+e],
             
-            // Bar 5-6: Rising tension
-            [N.Ab4, q*10, q, 0.3],
-            [N.Bb4, q*11, q, 0.35],
-            [N.C5, q*12, q, 0.4],
-            [N.Eb5, q*13, dq, 0.42],
-            [N.D5, q*14.5, q*2, 0.38],
+            // Bar 5-6: Building
+            [N.E4, q*16], [N.C4, q*16+e], [N.F4, q*17], [N.C4, q*17+e],
+            [N.E4, q*18], [N.B3, q*18+e], [N.E4, q*19], [N.Ab3, q*19+e],
+            [N.E4, q*20], [N.B3, q*20+e], [N.E4, q*21], [N.A3, q*21+e],
+            [N.E4, q*22], [N.C4, q*22+e], [N.E4, q*23], [N.B3, q*23+e],
             
-            // Bar 7-8: Resolution
-            [N.C5, q*16.5, q, 0.35],
-            [N.Bb4, q*17.5, q, 0.3],
-            [N.Ab4, q*18.5, q, 0.28],
-            [N.G4, q*19.5, q*3, 0.35],
-            
-            // Bar 9-10: Second phrase
-            [N.G4, q*22.5, q, 0.33],
-            [N.C5, q*23.5, q, 0.38],
-            [N.D5, q*24.5, h, 0.35],
-            [N.Eb5, q*25, q, 0.4],
-            [N.F5, q*26, dq, 0.42],
-            [N.Eb5, q*27.5, q*2, 0.38],
-            
-            // Bar 11-12: Descent
-            [N.D5, q*29.5, q, 0.35],
-            [N.C5, q*30.5, q, 0.33],
-            [N.Bb4, q*31.5, q, 0.3],
-            [N.G4, q*32.5, q*3, 0.35],
-            
-            // Bar 13-14: Climax
-            [N.Eb5, q*35.5, q, 0.42],
-            [N.F5, q*36.5, q, 0.44],
-            [N.G5, q*37.5, dq, 0.48],
-            [N.F5, q*39, q, 0.4],
-            [N.Eb5, q*40, q*2, 0.38],
-            
-            // Bar 15-16: Final descent
-            [N.D5, q*42, q, 0.35],
-            [N.C5, q*43, q, 0.33],
-            [N.Bb4, q*44, dq, 0.3],
-            [N.Ab4, q*45.5, q, 0.28],
-            [N.G4, q*46.5, q*4, 0.35],
+            // Bar 7-8: Tension
+            [N.F4, q*24], [N.C4, q*24+e], [N.F4, q*25], [N.D4, q*25+e],
+            [N.E4, q*26], [N.B3, q*26+e], [N.E4, q*27], [N.Ab3, q*27+e],
+            [N.E4, q*28], [N.A3, q*28+e], [N.E4, q*29], [N.B3, q*29+e],
+            [N.E4, q*30], [N.C4, q*30+e], [N.D4, q*31], [N.A3, q*31+e],
         ];
 
-        // Bass notes (left hand) — sparse, dark
-        const bass = [
-            [N.C3, 0, w, 0.25],
-            [N.G3, q*4, w, 0.22],
-            [N.Ab3, q*8, w, 0.22],
-            [N.Eb3, q*10, w, 0.2],
-            [N.G3, q*14, w, 0.22],
-            [N.C3, q*18, w, 0.25],
-            [N.C3, q*22, w, 0.25],
-            [N.F3, q*26, w, 0.22],
-            [N.G3, q*30, w, 0.22],
-            [N.C3, q*34, w, 0.25],
-            [N.Ab3, q*36, w, 0.22],
-            [N.Eb3, q*38, w, 0.2],
-            [N.G3, q*42, w, 0.22],
-            [N.C3, q*46, w, 0.25],
-        ];
-
-        melody.forEach(([freq, time, dur, vel]) => {
-            playPianoNote(freq, t + time, dur, vel);
+        pizz.forEach(([freq, time]) => {
+            playPizzicato(freq, t + time, 0.22);
         });
+
+        // === Eerie sustained strings (melody) ===
+        const strings = [
+            // Haunting melody over pizzicato
+            [N.E5, q*4, w, 0.1],
+            [N.D5, q*8, h, 0.1],
+            [N.C5, q*10, h, 0.1],
+            [N.B4, q*12, w, 0.1],
+            
+            [N.C5, q*16, h, 0.11],
+            [N.D5, q*18, h, 0.11],
+            [N.E5, q*20, w, 0.12],
+            
+            [N.F5, q*24, h, 0.13],
+            [N.E5, q*26, h, 0.12],
+            [N.D5, q*28, h, 0.11],
+            [N.C5, q*30, h, 0.1],
+        ];
+
+        strings.forEach(([freq, time, dur, vel]) => {
+            playString(freq, t + time, dur, vel);
+        });
+
+        // === Deep bass ===
+        const bass = [
+            [N.A2, 0, w, 0.16],
+            [N.A2, q*4, w, 0.16],
+            [N.F3, q*8, w, 0.14],
+            [N.E3, q*12, w, 0.15],
+            [N.A2, q*16, w, 0.16],
+            [N.F3, q*20, w, 0.14],
+            [N.D3, q*24, w, 0.15],
+            [N.A2, q*28, w, 0.16],
+        ];
 
         bass.forEach(([freq, time, dur, vel]) => {
-            playPianoNote(freq, t + time, dur * 1.5, vel);
+            playBass(freq, t + time, dur, vel);
         });
 
-        // Loop the sequence
-        const totalDuration = q * 50;
+        // Loop
+        const totalDuration = q * 32;
         loopTimeout = setTimeout(() => playSequence(), totalDuration * 1000);
     }
 
@@ -1000,20 +1075,13 @@ function toggleMusic() {
     const btn = document.getElementById('music-toggle');
     if (!isPlaying) {
         isPlaying = true;
-        if (!audioCtx) {
-            createDeathNoteTheme();
-        } else {
-            audioCtx.resume();
-            // Restart the loop
-            createDeathNoteTheme();
-        }
+        createLThemeA();
         btn.textContent = '🔊';
         btn.style.borderColor = '#c41e3a';
         btn.style.boxShadow = '0 0 20px rgba(196, 30, 58, 0.3)';
     } else {
         isPlaying = false;
-        if (loopTimeout) clearTimeout(loopTimeout);
-        if (audioCtx) audioCtx.suspend();
+        stopAllAudio();
         btn.textContent = '🔇';
         btn.style.borderColor = '#222';
         btn.style.boxShadow = 'none';
