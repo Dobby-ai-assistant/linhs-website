@@ -5,29 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nhật Bản Bí Ẩn — Những Nơi Không Có Trong Sách Du Lịch</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Inter:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Quicksand:wght@300;400;500;600&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #0a0a0a;
-            --card-bg: #111111;
-            --accent: #c41e3a;
-            --accent-glow: rgba(196, 30, 58, 0.3);
-            --text: #e0e0e0;
-            --text-dim: #888;
-            --text-bright: #ffffff;
-            --border: #222;
+            --pink: #d4637a;
+            --pink-soft: rgba(212, 99, 122, 0.15);
+            --pink-glow: rgba(212, 99, 122, 0.3);
+            --text: #ddd8d8;
+            --text-soft: rgba(255, 245, 247, 0.6);
+            --text-bright: #fff5f7;
+            --bg-dark: #0a0708;
+            --bg-mid: #1a1015;
+            --card-bg: rgba(20, 12, 16, 0.85);
+            --border: rgba(212, 99, 122, 0.15);
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            background: var(--bg);
             color: var(--text);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.7;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 400;
+            line-height: 1.8;
             overflow-x: hidden;
+            /* Ombre background: black → dark pink → black, fixed & moves with scroll via CSS */
+            background: var(--bg-dark);
         }
 
+        /* Ombre overlay that shifts with scroll — done via a tall pseudo-element */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: 
+                radial-gradient(ellipse at 50% 30%, rgba(212, 99, 122, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 20% 70%, rgba(180, 60, 90, 0.06) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 50%, rgba(212, 99, 122, 0.05) 0%, transparent 45%);
+            pointer-events: none;
+            z-index: 0;
+            animation: ombreShift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes ombreShift {
+            0% { 
+                background: 
+                    radial-gradient(ellipse at 50% 20%, rgba(212, 99, 122, 0.1) 0%, transparent 50%),
+                    radial-gradient(ellipse at 20% 80%, rgba(180, 60, 90, 0.05) 0%, transparent 40%),
+                    radial-gradient(ellipse at 80% 40%, rgba(212, 99, 122, 0.04) 0%, transparent 45%);
+            }
+            50% {
+                background: 
+                    radial-gradient(ellipse at 40% 50%, rgba(212, 99, 122, 0.12) 0%, transparent 55%),
+                    radial-gradient(ellipse at 70% 30%, rgba(180, 60, 90, 0.08) 0%, transparent 45%),
+                    radial-gradient(ellipse at 30% 70%, rgba(212, 99, 122, 0.06) 0%, transparent 40%);
+            }
+            100% { 
+                background: 
+                    radial-gradient(ellipse at 60% 80%, rgba(212, 99, 122, 0.1) 0%, transparent 50%),
+                    radial-gradient(ellipse at 80% 20%, rgba(180, 60, 90, 0.06) 0%, transparent 40%),
+                    radial-gradient(ellipse at 20% 50%, rgba(212, 99, 122, 0.05) 0%, transparent 45%);
+            }
+        }
+
+        /* Scroll-reactive ombre layer */
+        .ombre-scroll {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            transition: background 0.3s ease;
+        }
+
+        /* Everything sits above the ombre */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== HERO ===== */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -36,664 +95,629 @@
             align-items: center;
             text-align: center;
             padding: 2rem;
-            position: relative;
-            background:
-                radial-gradient(ellipse at 50% 0%, rgba(196, 30, 58, 0.15) 0%, transparent 60%),
-                var(--bg);
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" x="50" font-size="80" text-anchor="middle" fill="rgba(255,255,255,0.02)">鬼</text></svg>') repeat;
-            background-size: 200px;
-            opacity: 0.5;
-            pointer-events: none;
         }
 
         .hero-kanji {
             font-family: 'Noto Serif JP', serif;
             font-size: clamp(4rem, 12vw, 10rem);
             font-weight: 900;
-            color: var(--accent);
-            text-shadow: 0 0 60px var(--accent-glow), 0 0 120px rgba(196, 30, 58, 0.1);
+            color: var(--pink);
+            text-shadow: 0 0 80px var(--pink-glow);
             letter-spacing: 0.1em;
-            animation: pulseGlow 4s ease-in-out infinite;
+            animation: pulseGlow 5s ease-in-out infinite;
         }
 
         @keyframes pulseGlow {
-            0%, 100% { text-shadow: 0 0 60px var(--accent-glow), 0 0 120px rgba(196, 30, 58, 0.1); }
-            50% { text-shadow: 0 0 80px var(--accent-glow), 0 0 160px rgba(196, 30, 58, 0.2); }
+            0%, 100% { text-shadow: 0 0 60px var(--pink-glow); }
+            50% { text-shadow: 0 0 100px var(--pink-glow), 0 0 200px rgba(212, 99, 122, 0.1); }
         }
 
         .hero h1 {
-            font-family: 'Inter', sans-serif;
-            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-family: 'Quicksand', sans-serif;
+            font-size: clamp(1.2rem, 3.5vw, 2.5rem);
             font-weight: 300;
             color: var(--text-bright);
             margin-top: 1rem;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.4em;
             text-transform: uppercase;
         }
 
         .hero p {
-            max-width: 600px;
+            max-width: 550px;
             margin-top: 1.5rem;
-            color: var(--text-dim);
-            font-size: 1.1rem;
-            line-height: 1.8;
+            color: var(--text-soft);
+            font-size: 1rem;
+            font-weight: 300;
+            line-height: 2;
         }
 
         .scroll-hint {
             position: absolute;
             bottom: 2rem;
-            animation: bounce 2s ease-in-out infinite;
-            color: var(--text-dim);
-            font-size: 1.5rem;
+            animation: bounce 2.5s ease-in-out infinite;
+            color: var(--text-soft);
+            font-size: 1.2rem;
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(10px); }
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(8px); opacity: 1; }
         }
 
-        .nav {
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(10, 7, 8, 0.92);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
             padding: 1rem 2rem;
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: 0.5rem;
             flex-wrap: wrap;
         }
 
-        .nav a {
-            color: var(--text-dim);
+        .toc a {
+            color: var(--text-soft);
             text-decoration: none;
-            font-size: 0.85rem;
-            letter-spacing: 0.15em;
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            transition: color 0.3s;
-            font-weight: 600;
+            font-weight: 500;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            border: 1px solid transparent;
+            transition: all 0.3s;
         }
 
-        .nav a:hover { color: var(--accent); }
-
-        .section {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 6rem 2rem;
+        .toc a:hover, .toc a.active {
+            color: var(--pink);
+            border-color: var(--border);
         }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
+        /* ===== SLIDE SECTIONS (image + text overlay like PowerPoint) ===== */
+        .slide {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
         }
 
-        .section-header .category {
-            font-size: 0.8rem;
+        .slide-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+        }
+
+        .slide-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.3) saturate(0.7);
+            transition: transform 8s ease;
+        }
+
+        .slide:hover .slide-bg img {
+            transform: scale(1.05);
+        }
+
+        /* Gradient overlay for readability */
+        .slide-bg::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(10, 7, 8, 0.85) 0%,
+                rgba(10, 7, 8, 0.5) 40%,
+                rgba(212, 99, 122, 0.08) 100%
+            );
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 1;
+            max-width: 650px;
+            padding: 4rem 3rem;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .slide-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content .category {
+            font-size: 0.7rem;
             letter-spacing: 0.3em;
             text-transform: uppercase;
-            color: var(--accent);
+            color: var(--pink);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .slide-content h2 {
+            font-family: 'Noto Serif JP', serif;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            color: var(--text-bright);
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .slide-content .jp-name {
+            font-family: 'Noto Serif JP', serif;
+            color: var(--pink);
+            font-size: 0.95rem;
+            margin-top: 0.3rem;
+            margin-bottom: 1.2rem;
+            font-weight: 400;
+        }
+
+        .slide-content .location {
+            font-size: 0.75rem;
+            color: var(--text-soft);
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .slide-content p {
+            color: var(--text);
+            font-size: 0.92rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            line-height: 1.9;
+        }
+
+        .slide-content .visit-box {
+            background: rgba(212, 99, 122, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.3rem;
+            margin-top: 1.5rem;
+        }
+
+        .slide-content .visit-box strong {
+            color: var(--pink);
+            font-size: 0.68rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
             font-weight: 600;
         }
 
-        .section-header h2 {
+        .slide-content .visit-box p {
+            margin-top: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--text-soft);
+        }
+
+        /* Right-aligned slides */
+        .slide.right .slide-content {
+            margin-left: auto;
+        }
+
+        /* ===== SECTION DIVIDERS ===== */
+        .section-divider {
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+
+        .section-divider .label {
+            font-size: 0.7rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--pink);
+            font-weight: 600;
+        }
+
+        .section-divider h2 {
             font-family: 'Noto Serif JP', serif;
             font-size: clamp(2rem, 5vw, 3.5rem);
             color: var(--text-bright);
             margin-top: 0.5rem;
+            font-weight: 700;
         }
 
-        .section-header .subtitle {
-            color: var(--text-dim);
-            margin-top: 1rem;
-            max-width: 600px;
+        .section-divider .subtitle {
+            color: var(--text-soft);
+            margin-top: 0.8rem;
+            max-width: 500px;
             margin-left: auto;
             margin-right: auto;
-        }
-
-        .place {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin-bottom: 5rem;
-            align-items: center;
-        }
-
-        .place:nth-child(even) .place-info { order: -1; }
-
-        .place-image {
-            width: 100%;
-            aspect-ratio: 4/3;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .place-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(30%) contrast(1.1);
-            transition: filter 0.5s, transform 0.5s;
-        }
-
-        .place-image:hover img {
-            filter: grayscale(0%) contrast(1);
-            transform: scale(1.03);
-        }
-
-        .place-image .overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1rem;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .place-info h3 {
-            font-family: 'Noto Serif JP', serif;
-            font-size: 1.8rem;
-            color: var(--text-bright);
-            margin-bottom: 0.3rem;
-        }
-
-        .place-info .jp-name {
-            font-family: 'Noto Serif JP', serif;
-            color: var(--accent);
-            font-size: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .place-info .location {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .place-info p {
-            color: var(--text);
-            margin-bottom: 1rem;
+            font-weight: 300;
             font-size: 0.95rem;
         }
 
-        .place-info .tags {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-top: 1rem;
-        }
-
-        .tag {
-            font-size: 0.7rem;
-            padding: 0.3rem 0.8rem;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            color: var(--text-dim);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        .tag.danger { border-color: var(--accent); color: var(--accent); }
-
-        .visit-info {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 1rem 1.2rem;
-            margin-top: 1.5rem;
-            font-size: 0.85rem;
-        }
-
-        .visit-info strong {
-            color: var(--accent);
-            font-size: 0.7rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
-
-        .visit-info p {
-            margin-top: 0.3rem;
-            font-size: 0.85rem;
-            color: var(--text-dim);
-        }
-
-        .divider {
-            text-align: center;
-            padding: 2rem 0;
-            color: var(--border);
-            font-family: 'Noto Serif JP', serif;
-            font-size: 2rem;
-            letter-spacing: 1em;
-        }
-
+        /* ===== REGION MAP ===== */
         .map-section {
-            background: var(--card-bg);
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            padding: 4rem 2rem;
-            text-align: center;
+            padding: 5rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
         .map-section h2 {
             font-family: 'Noto Serif JP', serif;
             font-size: 2rem;
             color: var(--text-bright);
-            margin-bottom: 2rem;
+            text-align: center;
+            margin-bottom: 2.5rem;
         }
 
         .map-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            max-width: 1100px;
-            margin: 0 auto;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.2rem;
         }
 
         .map-card {
-            background: var(--bg);
+            background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 1.5rem;
-            text-align: left;
-            transition: border-color 0.3s;
+            border-radius: 8px;
+            padding: 1.3rem 1.5rem;
+            transition: border-color 0.3s, transform 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
         }
 
-        .map-card:hover { border-color: var(--accent); }
+        .map-card:hover {
+            border-color: var(--pink);
+            transform: translateY(-3px);
+        }
 
         .map-card .region {
-            font-size: 0.7rem;
-            color: var(--accent);
-            letter-spacing: 0.2em;
+            font-size: 0.65rem;
+            color: var(--pink);
+            letter-spacing: 0.25em;
             text-transform: uppercase;
-            margin-bottom: 0.5rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
         }
 
         .map-card h4 {
             color: var(--text-bright);
             font-size: 1rem;
+            font-weight: 600;
             margin-bottom: 0.3rem;
         }
 
         .map-card p {
             font-size: 0.8rem;
-            color: var(--text-dim);
+            color: var(--text-soft);
+            font-weight: 300;
         }
 
-        .tips {
-            max-width: 800px;
+        /* ===== TIPS ===== */
+        .tips-section {
+            max-width: 700px;
             margin: 0 auto;
-            padding: 6rem 2rem;
+            padding: 5rem 2rem;
         }
 
-        .tips h2 {
+        .tips-section h2 {
             font-family: 'Noto Serif JP', serif;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             color: var(--text-bright);
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
         }
 
         .tip {
             display: flex;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            padding-bottom: 2rem;
+            gap: 1.2rem;
+            margin-bottom: 1.8rem;
+            padding-bottom: 1.8rem;
             border-bottom: 1px solid var(--border);
         }
 
         .tip-icon {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             flex-shrink: 0;
-            width: 3rem;
-            height: 3rem;
+            width: 2.8rem;
+            height: 2.8rem;
             display: flex;
             align-items: center;
             justify-content: center;
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 4px;
+            border-radius: 8px;
         }
 
         .tip h4 {
             color: var(--text-bright);
+            font-weight: 600;
+            font-size: 0.95rem;
             margin-bottom: 0.3rem;
         }
 
         .tip p {
-            color: var(--text-dim);
-            font-size: 0.9rem;
+            color: var(--text-soft);
+            font-size: 0.85rem;
+            font-weight: 300;
+            line-height: 1.8;
         }
 
+        /* ===== FOOTER ===== */
         footer {
             text-align: center;
             padding: 4rem 2rem;
             border-top: 1px solid var(--border);
-            color: var(--text-dim);
-            font-size: 0.8rem;
         }
 
         footer .kanji {
             font-family: 'Noto Serif JP', serif;
             font-size: 1.5rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
+            color: var(--pink);
+            margin-bottom: 0.8rem;
         }
 
+        footer p {
+            color: var(--text-soft);
+            font-size: 0.75rem;
+            font-weight: 300;
+        }
+
+        /* ===== MUSIC BUTTON ===== */
+        #music-toggle {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 999;
+            width: 48px;
+            height: 48px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.3rem;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        #music-toggle:hover { transform: scale(1.1); }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .place {
-                grid-template-columns: 1fr;
-            }
-            .place:nth-child(even) .place-info { order: 0; }
-            .nav { gap: 1rem; }
-            .nav a { font-size: 0.75rem; }
+            .slide-content { padding: 3rem 2rem; }
+            .toc { gap: 0.3rem; }
+            .toc a { font-size: 0.68rem; padding: 0.3rem 0.6rem; }
         }
     </style>
 </head>
 <body>
 
+<div class="ombre-scroll" id="ombreScroll"></div>
+
+<div class="content-wrapper">
+
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="top">
     <div class="hero-kanji">闇日本</div>
     <h1>Nhật Bản Bí Ẩn</h1>
     <p>Quên hoa anh đào và selfie ở đền chùa đi. Đây là nước Nhật mà không sách du lịch nào dám viết — rừng ma ám, đảo hoang, cổng xuống địa ngục, và những nơi ranh giới giữa hai thế giới mỏng như tờ giấy.</p>
     <div class="scroll-hint">↓</div>
 </section>
 
-<!-- NAV -->
-<nav class="nav">
-    <a href="#haunted">Ma Ám</a>
-    <a href="#abandoned">Hoang Phế</a>
-    <a href="#dark-history">Lịch Sử Đen</a>
-    <a href="#supernatural">Siêu Nhiên</a>
+<!-- TABLE OF CONTENTS -->
+<nav class="toc" id="toc">
+    <a href="#aokigahara">Aokigahara</a>
+    <a href="#inunaki">Inunaki</a>
+    <a href="#hashima">Hashima</a>
+    <a href="#nara">Nara Dreamland</a>
+    <a href="#nichitsu">Nichitsu</a>
+    <a href="#okunoshima">Ōkunoshima</a>
+    <a href="#matsuo">Matsuo</a>
+    <a href="#osore">Núi Osore</a>
+    <a href="#tono">Tōno</a>
     <a href="#map">Bản Đồ</a>
-    <a href="#tips">Mẹo Du Lịch</a>
+    <a href="#tips">Mẹo</a>
 </nav>
 
 <!-- ==================== MA ÁM ==================== -->
-<section class="section" id="haunted">
-    <div class="section-header">
-        <div class="category">幽霊 · Yūrei · Hồn Ma</div>
-        <h2>Ma Ám</h2>
-        <p class="subtitle">Những nơi người chết được cho là vẫn còn vương vấn. Hãy bước đi cẩn thận.</p>
-    </div>
+<div class="section-divider" id="haunted">
+    <div class="label">幽霊 · Yūrei · Hồn Ma</div>
+    <h2>Ma Ám</h2>
+    <p class="subtitle">Những nơi người chết được cho là vẫn còn vương vấn.</p>
+</div>
 
-    <!-- Aokigahara -->
-    <div class="place">
-        <div class="place-image">
-            <img src="https://images.unsplash.com/photo-1554797589-7241bb691973?w=800&q=80" alt="Rừng Aokigahara">
-            <div class="overlay">Tỉnh Yamanashi</div>
-        </div>
-        <div class="place-info">
-            <h3>Aokigahara</h3>
-            <div class="jp-name">青木ヶ原 — Biển Cây</div>
-            <div class="location">📍 Sườn tây bắc núi Phú Sĩ, Yamanashi</div>
-            <p>Một khu rừng rộng 35 km² mọc trên dung nham cổ đã hóa đá từ lần phun trào cuối cùng của núi Phú Sĩ năm 864 sau Công Nguyên. Đá dung nham xốp hấp thụ mọi âm thanh. Bước khỏi đường mòn và sự im lặng sẽ nuốt chửng bạn.</p>
-            <p>Từ hàng thế kỷ nay, nơi đây được biết đến là chốn cư ngụ của <em>yūrei</em> — những hồn ma bất an trong thần thoại Nhật Bản. Rừng rậm đến mức la bàn được cho là bị nhiễu loạn do sắt từ trong đất núi lửa. Từ thập niên 1960, nó mang thêm một danh tiếng đen tối hơn nhiều khiến cả thế giới biết đến.</p>
-            <div class="visit-info">
-                <strong>Tham Quan</strong>
-                <p>Đi theo đường mòn có đánh dấu. Các hang băng ở phía tây là điểm thu hút chính. Có tour đi bộ thiên nhiên có hướng dẫn. Đi sáng sớm khi sương mù còn thấp — không khí ấn tượng không thể quên.</p>
-            </div>
-            <div class="tags">
-                <span class="tag danger">cường độ cao</span>
-                <span class="tag">rừng</span>
-                <span class="tag">truyền thuyết</span>
-                <span class="tag">miễn phí</span>
-            </div>
-        </div>
+<!-- AOKIGAHARA -->
+<section class="slide" id="aokigahara">
+    <div class="slide-bg">
+        <img src="https://images.unsplash.com/photo-1554797589-7241bb691973?w=1200&q=80" alt="Rừng Aokigahara">
     </div>
-
-    <!-- Inunaki -->
-    <div class="place">
-        <div class="place-image">
-            <img src="https://images.unsplash.com/photo-1570521462033-3015e76e7432?w=800&q=80" alt="Đường hầm tối">
-            <div class="overlay">Tỉnh Fukuoka</div>
-        </div>
-        <div class="place-info">
-            <h3>Làng Inunaki & Đường Hầm Cũ Inunaki</h3>
-            <div class="jp-name">犬鳴村 — Làng Chó Tru</div>
-            <div class="location">📍 Đèo núi Inunaki, Fukuoka</div>
-            <p>Truyền thuyết đô thị nổi tiếng nhất Nhật Bản. Một ngôi làng được cho là đã từ chối hiến pháp Nhật Bản, nơi có tấm biển ghi: <em>"Luật pháp Nhật Bản không có hiệu lực từ đây trở đi."</em> Ai bước vào đều không bao giờ quay lại.</p>
-            <p>Làng Inunaki thật sự tồn tại từ 1691-1889 và đã bị ngập khi xây đập. Đường hầm cũ Inunaki gần đó giờ đã bị niêm phong nhưng vẫn là một trong những địa điểm "ma ám" khét tiếng nhất Nhật Bản. Truyền thuyết này đã truyền cảm hứng cho bộ phim kinh dị năm 2019.</p>
-            <div class="visit-info">
-                <strong>Tham Quan</strong>
-                <p>Đường hầm cũ đã bị niêm phong. Khu vực quanh đập Inunaki và đèo núi vẫn có thể đến được và thực sự rùng rợn. Nên đến vào ban ngày. Đừng đi một mình ban đêm — không phải vì ma, mà vì nơi đây hẻo lánh và thiếu ánh sáng.</p>
-            </div>
-            <div class="tags">
-                <span class="tag danger">truyền thuyết đô thị</span>
-                <span class="tag">đường hầm</span>
-                <span class="tag">kinh dị</span>
-                <span class="tag">hẻo lánh</span>
-            </div>
+    <div class="slide-content">
+        <div class="category">Tỉnh Yamanashi · Ma Ám</div>
+        <h2>Aokigahara</h2>
+        <div class="jp-name">青木ヶ原 — Biển Cây</div>
+        <div class="location">📍 Sườn tây bắc núi Phú Sĩ</div>
+        <p>Một khu rừng rộng 35 km² mọc trên dung nham cổ đã hóa đá từ lần phun trào cuối cùng của núi Phú Sĩ năm 864 sau Công Nguyên. Đá dung nham xốp hấp thụ mọi âm thanh. Bước khỏi đường mòn và sự im lặng sẽ nuốt chửng bạn.</p>
+        <p>Từ hàng thế kỷ nay, nơi đây được biết đến là chốn cư ngụ của yūrei — những hồn ma bất an trong thần thoại Nhật Bản. Rừng rậm đến mức la bàn được cho là bị nhiễu loạn do sắt từ trong đất núi lửa.</p>
+        <div class="visit-box">
+            <strong>Tham Quan</strong>
+            <p>Đi theo đường mòn có đánh dấu. Các hang băng ở phía tây là điểm thu hút chính. Có tour đi bộ thiên nhiên có hướng dẫn. Đi sáng sớm khi sương mù còn thấp — không khí ấn tượng không thể quên.</p>
         </div>
     </div>
 </section>
 
-<div class="divider">⛩ ⛩ ⛩</div>
+<!-- INUNAKI -->
+<section class="slide right" id="inunaki">
+    <div class="slide-bg">
+        <img src="https://images.unsplash.com/photo-1570521462033-3015e76e7432?w=1200&q=80" alt="Đường hầm tối">
+    </div>
+    <div class="slide-content">
+        <div class="category">Tỉnh Fukuoka · Ma Ám</div>
+        <h2>Làng Inunaki</h2>
+        <div class="jp-name">犬鳴村 — Làng Chó Tru</div>
+        <div class="location">📍 Đèo núi Inunaki, Fukuoka</div>
+        <p>Truyền thuyết đô thị nổi tiếng nhất Nhật Bản. Một ngôi làng được cho là đã từ chối hiến pháp Nhật Bản, nơi có tấm biển ghi: "Luật pháp Nhật Bản không có hiệu lực từ đây trở đi." Ai bước vào đều không bao giờ quay lại.</p>
+        <p>Làng Inunaki thật sự tồn tại từ 1691–1889 và đã bị ngập khi xây đập. Đường hầm cũ Inunaki gần đó giờ đã bị niêm phong nhưng vẫn là một trong những địa điểm "ma ám" khét tiếng nhất Nhật Bản.</p>
+        <div class="visit-box">
+            <strong>Tham Quan</strong>
+            <p>Đường hầm cũ đã bị niêm phong. Khu vực quanh đập Inunaki vẫn có thể đến được và thực sự rùng rợn. Nên đến vào ban ngày. Đừng đi một mình ban đêm — nơi đây hẻo lánh và thiếu ánh sáng.</p>
+        </div>
+    </div>
+</section>
 
 <!-- ==================== HOANG PHẾ ==================== -->
-<section class="section" id="abandoned">
-    <div class="section-header">
-        <div class="category">廃墟 · Haikyo · Phế Tích</div>
-        <h2>Hoang Phế</h2>
-        <p class="subtitle">Đô thị hoang tàn được thiên nhiên chiếm lại. Văn hóa haikyo của Nhật Bản rất sâu sắc.</p>
-    </div>
+<div class="section-divider" id="abandoned">
+    <div class="label">廃墟 · Haikyo · Phế Tích</div>
+    <h2>Hoang Phế</h2>
+    <p class="subtitle">Đô thị hoang tàn được thiên nhiên chiếm lại.</p>
+</div>
 
-    <!-- Hashima Island -->
-    <div class="place">
-        <div class="place-image">
-            <img src="https://images.unsplash.com/photo-1624601573012-efb68931cc8f?w=800&q=80" alt="Đảo Hashima">
-            <div class="overlay">Tỉnh Nagasaki</div>
-        </div>
-        <div class="place-info">
-            <h3>Đảo Hashima (Gunkanjima)</h3>
-            <div class="jp-name">端島 — Đảo Chiến Hạm</div>
-            <div class="location">📍 Cách bờ biển Nagasaki 15 km</div>
-            <p>Một hòn đảo bê tông ma từng có mật độ dân số cao nhất Trái Đất — 5.259 người chen chúc trên 6,3 hecta vào năm 1959. Được xây cho khai thác than dưới biển, nơi đây có chung cư, trường học, bệnh viện, rạp chiếu phim, thậm chí cả vườn trên mái.</p>
-            <p>Khi than cạn kiệt năm 1974, tất cả mọi người rời đi. Toàn bộ hòn đảo bị bỏ hoang qua đêm. Giờ đây những tòa nhà bê tông thô mộc đang sụp đổ vào Thái Bình Dương, không ai chạm tới suốt hàng thập kỷ. Bạn có thể nhận ra nó là hang ổ phản diện trong phim James Bond <em>Skyfall</em>.</p>
-            <div class="visit-info">
-                <strong>Tham Quan</strong>
-                <p>Di sản Thế giới UNESCO. Tour bằng thuyền khởi hành từ cảng Nagasaki (~¥4.000-5.000). Có thể đi bộ trên đường dành riêng trên đảo. Tour bị hủy khi thời tiết xấu. Đặt trước — thường hết vé.</p>
-            </div>
-            <div class="tags">
-                <span class="tag">UNESCO</span>
-                <span class="tag">đảo</span>
-                <span class="tag">phế tích công nghiệp</span>
-                <span class="tag">tour thuyền</span>
-            </div>
-        </div>
+<!-- HASHIMA -->
+<section class="slide" id="hashima">
+    <div class="slide-bg">
+        <img src="https://images.unsplash.com/photo-1624601573012-efb68931cc8f?w=1200&q=80" alt="Đảo Hashima">
     </div>
-
-    <!-- Nara Dreamland -->
-    <div class="place">
-        <div class="place-image">
-            <img src="https://images.unsplash.com/photo-1505069190533-da1c9af13346?w=800&q=80" alt="Công viên giải trí bỏ hoang">
-            <div class="overlay">Tỉnh Nara</div>
-        </div>
-        <div class="place-info">
-            <h3>Nara Dreamland</h3>
-            <div class="jp-name">奈良ドリームランド — Disneyland Chết Của Nhật</div>
-            <div class="location">📍 Thành phố Nara</div>
-            <p>Một bản sao Disneyland mở cửa năm 1961 sau khi một doanh nhân Nhật Bản đến thăm công viên gốc ở Anaheim và muốn xây một cái tương tự. Đầy đủ lâu đài Công Chúa Ngủ, sáu tàu lượn siêu tốc, và cả phố chính riêng.</p>
-            <p>Khi Tokyo Disneyland thật mở năm 1983, lượng khách sụp đổ. Nó cầm cự đến năm 2006 rồi bị bỏ hoang hoàn toàn — để mục nát với các trò chơi vẫn còn đứng, tượng linh vật phủ rêu xanh. Nó trở thành thánh địa của dân khám phá đô thị trước khi bị phá dỡ năm 2016-2017.</p>
-            <div class="visit-info">
-                <strong>Tham Quan</strong>
-                <p>⚠️ <strong>Đã bị phá dỡ.</strong> Công viên đã bị dỡ bỏ năm 2016-2017. Khu đất giờ đã được san bằng. Mục này có ở đây vì lịch sử — đây từng là một trong những nơi bỏ hoang được chụp ảnh nhiều nhất Nhật Bản.</p>
-            </div>
-            <div class="tags">
-                <span class="tag danger">đã phá dỡ</span>
-                <span class="tag">công viên giải trí</span>
-                <span class="tag">huyền thoại haikyo</span>
-                <span class="tag">nhiếp ảnh</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Nichitsu -->
-    <div class="place">
-        <div class="place-image">
-            <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=800&q=80" alt="Thị trấn mỏ trên núi">
-            <div class="overlay">Tỉnh Saitama</div>
-        </div>
-        <div class="place-info">
-            <h3>Thị Trấn Ma Nichitsu</h3>
-            <div class="jp-name">ニッチツ鉱山 — Thị Trấn Ma Trên Núi</div>
-            <div class="location">📍 Chichibu, Saitama (3 giờ từ Tokyo)</div>
-            <p>Sâu trong vùng núi Saitama, cả một thị trấn mỏ nằm bỏ hoang. Nhà cửa, bệnh viện, trường học — tất cả đóng băng trong thời gian kể từ khi mỏ đóng cửa. Sách giáo khoa vẫn nằm trên bàn. Đồ đạc cá nhân vương vãi khắp sàn.</p>
-            <p>Điều khiến Nichitsu đặc biệt là có thể đến được từ Tokyo và sự hoàn chỉnh đáng kinh ngạc của những gì còn sót lại. Như thể cư dân chỉ đơn giản... bước ra ngoài một ngày và không bao giờ quay lại. Cảnh núi non xung quanh càng tăng thêm cảm giác khác thường.</p>
-            <div class="visit-info">
-                <strong>Tham Quan</strong>
-                <p>Khu vực này thuộc sở hữu tư nhân — vào bằng rủi ro của bạn và hãy tôn trọng nơi đây. Đến bằng ô tô qua đường núi từ Chichibu. Chuyến lái xe qua hẻm núi cũng rất ngoạn mục. Một số tòa nhà có kết cấu không an toàn.</p>
-            </div>
-            <div class="tags">
-                <span class="tag danger">tự chịu rủi ro</span>
-                <span class="tag">thị trấn mỏ</span>
-                <span class="tag">viên nang thời gian</span>
-                <span class="tag">hẻo lánh</span>
-            </div>
+    <div class="slide-content">
+        <div class="category">Tỉnh Nagasaki · Hoang Phế</div>
+        <h2>Đảo Hashima</h2>
+        <div class="jp-name">端島 — Đảo Chiến Hạm (Gunkanjima)</div>
+        <div class="location">📍 Cách bờ biển Nagasaki 15 km</div>
+        <p>Một hòn đảo bê tông ma từng có mật độ dân số cao nhất Trái Đất — 5.259 người chen chúc trên 6,3 hecta vào năm 1959. Được xây cho khai thác than dưới biển, nơi đây có chung cư, trường học, bệnh viện, rạp chiếu phim, thậm chí cả vườn trên mái.</p>
+        <p>Khi than cạn kiệt năm 1974, tất cả mọi người rời đi. Toàn bộ hòn đảo bị bỏ hoang qua đêm. Bạn có thể nhận ra nó là hang ổ phản diện trong phim James Bond Skyfall.</p>
+        <div class="visit-box">
+            <strong>Tham Quan</strong>
+            <p>Di sản Thế giới UNESCO. Tour bằng thuyền từ cảng Nagasaki (~¥4.000–5.000). Tour bị hủy khi thời tiết xấu. Đặt trước — thường hết vé.</p>
         </div>
     </div>
 </section>
 
-<div class="divider">⛩ ⛩ ⛩</div>
+<!-- NARA DREAMLAND -->
+<section class="slide right" id="nara">
+    <div class="slide-bg">
+        <img src="https://images.unsplash.com/photo-1505069190533-da1c9af13346?w=1200&q=80" alt="Công viên giải trí bỏ hoang">
+    </div>
+    <div class="slide-content">
+        <div class="category">Tỉnh Nara · Hoang Phế</div>
+        <h2>Nara Dreamland</h2>
+        <div class="jp-name">奈良ドリームランド — Disneyland Chết Của Nhật</div>
+        <div class="location">📍 Thành phố Nara</div>
+        <p>Một bản sao Disneyland mở cửa năm 1961. Đầy đủ lâu đài Công Chúa Ngủ, sáu tàu lượn siêu tốc, và cả phố chính riêng.</p>
+        <p>Khi Tokyo Disneyland thật mở năm 1983, lượng khách sụp đổ. Nó cầm cự đến năm 2006 rồi bị bỏ hoang hoàn toàn — để mục nát với các trò chơi vẫn còn đứng, tượng linh vật phủ rêu xanh. Nó trở thành thánh địa của dân khám phá đô thị trước khi bị phá dỡ năm 2016–2017.</p>
+        <div class="visit-box">
+            <strong>Lưu Ý</strong>
+            <p>⚠️ Đã bị phá dỡ năm 2016–2017. Khu đất giờ đã được san bằng. Mục này có ở đây vì lịch sử — đây từng là một trong những nơi bỏ hoang được chụp ảnh nhiều nhất Nhật Bản.</p>
+        </div>
+    </div>
+</section>
+
+<!-- NICHITSU -->
+<section class="slide" id="nichitsu">
+    <div class="slide-bg">
+        <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1200&q=80" alt="Thị trấn mỏ trên núi">
+    </div>
+    <div class="slide-content">
+        <div class="category">Tỉnh Saitama · Hoang Phế</div>
+        <h2>Thị Trấn Ma Nichitsu</h2>
+        <div class="jp-name">ニッチツ鉱山 — Thị Trấn Ma Trên Núi</div>
+        <div class="location">📍 Chichibu, Saitama — 3 giờ từ Tokyo</div>
+        <p>Sâu trong vùng núi Saitama, cả một thị trấn mỏ nằm bỏ hoang. Nhà cửa, bệnh viện, trường học — tất cả đóng băng trong thời gian. Sách giáo khoa vẫn nằm trên bàn. Đồ đạc cá nhân vương vãi khắp sàn.</p>
+        <p>Như thể cư dân chỉ đơn giản bước ra ngoài một ngày và không bao giờ quay lại. Cảnh núi non xung quanh càng tăng thêm cảm giác khác thường.</p>
+        <div class="visit-box">
+            <strong>Tham Quan</strong>
+            <p>Khu vực thuộc sở hữu tư nhân — vào bằng rủi ro của bạn và hãy tôn trọng. Đến bằng ô tô qua đường núi từ Chichibu. Một số tòa nhà có kết cấu không an toàn.</p>
+        </div>
+    </div>
+</section>
 
 <!-- ==================== LỊCH SỬ ĐEN ==================== -->
-<section class="section" id="dark-history">
-    <div class="section-header">
-        <div class="category">暗い歴史 · Lịch Sử Đen Tối</div>
-        <h2>Lịch Sử Đen</h2>
-        <p class="subtitle">Những nơi tuyệt đẹp với quá khứ kinh hoàng. Lịch sử không phải lúc nào cũng được gói đẹp.</p>
-    </div>
+<div class="section-divider" id="dark-history">
+    <div class="label">暗い歴史 · Lịch Sử Đen Tối</div>
+    <h2>Lịch Sử Đen</h2>
+    <p class="subtitle">Những nơi tuyệt đẹp với quá khứ kinh hoàng.</p>
+</div>
 
-    <!-- Okunoshima -->
-    <div class="place">
-        <div class="place-image">
-            <img src="https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=800&q=80" alt="Thỏ">
-            <div class="overlay">Tỉnh Hiroshima</div>
-        </div>
-        <div class="place-info">
-            <h3>Ōkunoshima (Đảo Thỏ)</h3>
-            <div class="jp-name">大久野島 — Đảo Khí Độc</div>
-            <div class="location">📍 Biển nội địa Seto, Tỉnh Hiroshima</div>
-            <p>Ngày nay nó được gọi là "Đảo Thỏ" — hàng trăm con thỏ hoang thân thiện nhảy đến du khách xin đồ ăn. Vàng Instagram. Đáng yêu. Nhưng vẻ ngoài dễ thương che giấu một trong những bí mật đen tối nhất của Nhật Bản.</p>
-            <p>Từ 1929 đến 1945, hòn đảo này là nhà máy vũ khí hóa học bí mật sản xuất khí độc cho cuộc chiến của Nhật ở Trung Quốc. Nó đã bị xóa khỏi bản đồ. Công nhân không được biết họ đang sản xuất gì. Nhà máy khí độc và nhà máy điện hoang tàn vẫn còn đứng, sụp đổ dần giữa bầy thỏ.</p>
-            <div class="visit-info">
-                <strong>Tham Quan</strong>
-                <p>Phà từ cảng Tadanoumi (~15 phút). Có khách sạn resort và camping. Ghé thăm Bảo tàng Khí Độc (¥100) — nhỏ nhưng ấn tượng. Mang đồ ăn cho thỏ từ đất liền. Sự tương phản giữa thỏ dễ thương và phế tích chiến tranh thật siêu thực.</p>
-            </div>
-            <div class="tags">
-                <span class="tag">lịch sử chiến tranh</span>
-                <span class="tag">vũ khí hóa học</span>
-                <span class="tag">thỏ</span>
-                <span class="tag">đảo</span>
-                <span class="tag">bảo tàng</span>
-            </div>
-        </div>
+<!-- OKUNOSHIMA -->
+<section class="slide right" id="okunoshima">
+    <div class="slide-bg">
+        <img src="https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=1200&q=80" alt="Thỏ">
     </div>
-
-    <!-- Matsuo Mine -->
-    <div class="place">
-        <div class="place-image">
-            <img src="https://images.unsplash.com/photo-1590559899731-a382839e5549?w=800&q=80" alt="Phế tích bê tông trong sương">
-            <div class="overlay">Tỉnh Iwate</div>
-        </div>
-        <div class="place-info">
-            <h3>Chung Cư Mỏ Matsuo</h3>
-            <div class="jp-name">松尾鉱山 — Phế Tích Trên Mây</div>
-            <div class="location">📍 Hachimantai, Tỉnh Iwate</div>
-            <p>Ở độ cao 1.000 mét phía bắc Honshu, những khối chung cư bê tông khổng lồ hiện ra từ sương mù như cảnh phim hậu tận thế. Từng là nhà của 15.000 thợ mỏ và gia đình họ, thị trấn khai thác lưu huỳnh này được gọi là "thiên đường trên mây."</p>
-            <p>Khi mỏ đóng cửa năm 1969, cả cộng đồng biến mất. Các tòa chung cư — một trong những công trình nhà ở bê tông cốt thép đầu tiên ở Nhật — vẫn còn đứng, dần bị thời tiết trên núi nuốt chửng. Mùa đông chúng bị chôn trong tuyết. Trong sương mù, chúng xuất hiện rồi biến mất như những bóng ma.</p>
-            <div class="visit-info">
-                <strong>Tham Quan</strong>
-                <p>Nhìn thấy được từ đường đến Hachimantai. Các tòa nhà được rào chắn và có nguy hiểm về kết cấu — ngắm từ bên ngoài. Nên kết hợp với chuyến đi suối nước nóng Hachimantai. Mùa lá đỏ tạo sự tương phản tuyệt đẹp.</p>
-            </div>
-            <div class="tags">
-                <span class="tag">phế tích công nghiệp</span>
-                <span class="tag">núi</span>
-                <span class="tag">nhiếp ảnh</span>
-                <span class="tag">không khí huyền bí</span>
-            </div>
+    <div class="slide-content">
+        <div class="category">Tỉnh Hiroshima · Lịch Sử Đen</div>
+        <h2>Ōkunoshima</h2>
+        <div class="jp-name">大久野島 — Đảo Khí Độc (Đảo Thỏ)</div>
+        <div class="location">📍 Biển nội địa Seto, Hiroshima</div>
+        <p>Ngày nay nó được gọi là "Đảo Thỏ" — hàng trăm con thỏ hoang thân thiện nhảy đến du khách xin đồ ăn. Đáng yêu. Nhưng vẻ ngoài dễ thương che giấu một trong những bí mật đen tối nhất của Nhật Bản.</p>
+        <p>Từ 1929 đến 1945, hòn đảo này là nhà máy vũ khí hóa học bí mật sản xuất khí độc cho cuộc chiến của Nhật ở Trung Quốc. Nó đã bị xóa khỏi bản đồ. Nhà máy khí độc hoang tàn vẫn còn đứng, sụp đổ dần giữa bầy thỏ.</p>
+        <div class="visit-box">
+            <strong>Tham Quan</strong>
+            <p>Phà từ cảng Tadanoumi (~15 phút). Ghé thăm Bảo tàng Khí Độc (¥100). Mang đồ ăn cho thỏ từ đất liền. Sự tương phản giữa thỏ dễ thương và phế tích chiến tranh thật siêu thực.</p>
         </div>
     </div>
 </section>
 
-<div class="divider">⛩ ⛩ ⛩</div>
+<!-- MATSUO -->
+<section class="slide" id="matsuo">
+    <div class="slide-bg">
+        <img src="https://images.unsplash.com/photo-1590559899731-a382839e5549?w=1200&q=80" alt="Phế tích bê tông trong sương">
+    </div>
+    <div class="slide-content">
+        <div class="category">Tỉnh Iwate · Lịch Sử Đen</div>
+        <h2>Chung Cư Mỏ Matsuo</h2>
+        <div class="jp-name">松尾鉱山 — Phế Tích Trên Mây</div>
+        <div class="location">📍 Hachimantai, Iwate</div>
+        <p>Ở độ cao 1.000 mét, những khối chung cư bê tông khổng lồ hiện ra từ sương mù như cảnh phim hậu tận thế. Từng là nhà của 15.000 thợ mỏ và gia đình họ, thị trấn khai thác lưu huỳnh này được gọi là "thiên đường trên mây."</p>
+        <p>Khi mỏ đóng cửa năm 1969, cả cộng đồng biến mất. Trong sương mù, các tòa nhà xuất hiện rồi biến mất như những bóng ma.</p>
+        <div class="visit-box">
+            <strong>Tham Quan</strong>
+            <p>Nhìn thấy được từ đường đến Hachimantai. Các tòa nhà được rào chắn — ngắm từ bên ngoài. Nên kết hợp với chuyến đi suối nước nóng. Mùa lá đỏ tạo sự tương phản tuyệt đẹp.</p>
+        </div>
+    </div>
+</section>
 
 <!-- ==================== SIÊU NHIÊN ==================== -->
-<section class="section" id="supernatural">
-    <div class="section-header">
-        <div class="category">冥界 · Thế Giới Bên Kia</div>
-        <h2>Siêu Nhiên</h2>
-        <p class="subtitle">Nơi thế giới người sống gặp người chết. Nhật Bản coi điều này hoàn toàn nghiêm túc.</p>
-    </div>
+<div class="section-divider" id="supernatural">
+    <div class="label">冥界 · Thế Giới Bên Kia</div>
+    <h2>Siêu Nhiên</h2>
+    <p class="subtitle">Nơi thế giới người sống gặp người chết.</p>
+</div>
 
-    <!-- Mount Osore -->
-    <div class="place">
-        <div class="place-image">
-            <img src="https://images.unsplash.com/photo-1513415756790-2ac1db1297d0?w=800&q=80" alt="Cảnh quan núi lửa">
-            <div class="overlay">Tỉnh Aomori</div>
-        </div>
-        <div class="place-info">
-            <h3>Núi Osore (Osorezan)</h3>
-            <div class="jp-name">恐山 — Núi Kinh Hoàng</div>
-            <div class="location">📍 Bán đảo Shimokita, Aomori (cực bắc Honshu)</div>
-            <p>Một trong ba địa điểm linh thiêng nhất Nhật Bản — và là cổng vào thế giới bên kia theo đúng nghĩa đen. Một ngôi chùa Phật giáo nằm bên trong miệng núi lửa đang hoạt động. Cảnh quan như địa ngục: hơi lưu huỳnh bốc lên từ mặt đất vàng úa cằn cỗi, mùi trứng thối tràn ngập không khí, và một hồ nước xanh ngọc lam nguyên sơ nằm giữa tất cả.</p>
-            <p>Tên của nó có nghĩa là "Núi Kinh Hoàng" (từ tiếng Ainu, sau đó được ghép với từ tiếng Nhật <em>osore</em> — sợ hãi). Được lập năm 862 sau Công Nguyên. Những đồng cốt mù gọi là <em>itako</em> tụ họp ở đây trong các lễ hội mùa hè để gọi hồn người chết. Du khách để lại chong chóng và đồ chơi cho trẻ em đã mất.</p>
-            <div class="visit-info">
-                <strong>Tham Quan</strong>
-                <p>Chỉ mở cửa tháng 5 đến tháng 10 (tuyết đóng cửa vào mùa đông). Vé ¥500. Chùa Bodai-ji có suối nước nóng onsen miễn phí từ nước suối núi lửa. Lễ hội Itako Taisai (tháng 7) là khi các đồng cốt giao tiếp với người chết. Hẻo lánh — thành phố gần nhất là Mutsu. Đáng để đi.</p>
-            </div>
-            <div class="tags">
-                <span class="tag danger">địa điểm linh thiêng</span>
-                <span class="tag">núi lửa</span>
-                <span class="tag">âm phủ</span>
-                <span class="tag">chùa</span>
-                <span class="tag">onsen</span>
-            </div>
+<!-- MOUNT OSORE -->
+<section class="slide right" id="osore">
+    <div class="slide-bg">
+        <img src="https://images.unsplash.com/photo-1513415756790-2ac1db1297d0?w=1200&q=80" alt="Cảnh quan núi lửa">
+    </div>
+    <div class="slide-content">
+        <div class="category">Tỉnh Aomori · Siêu Nhiên</div>
+        <h2>Núi Osore</h2>
+        <div class="jp-name">恐山 — Núi Kinh Hoàng</div>
+        <div class="location">📍 Bán đảo Shimokita, Aomori — cực bắc Honshu</div>
+        <p>Một trong ba địa điểm linh thiêng nhất Nhật Bản — và là cổng vào thế giới bên kia theo đúng nghĩa đen. Một ngôi chùa Phật giáo nằm bên trong miệng núi lửa đang hoạt động. Hơi lưu huỳnh bốc lên từ mặt đất vàng úa, mùi trứng thối tràn ngập không khí, và một hồ nước xanh ngọc lam nằm giữa tất cả.</p>
+        <p>Tên của nó có nghĩa là "Núi Kinh Hoàng." Được lập năm 862 sau Công Nguyên. Những đồng cốt mù gọi là itako tụ họp ở đây trong các lễ hội mùa hè để gọi hồn người chết.</p>
+        <div class="visit-box">
+            <strong>Tham Quan</strong>
+            <p>Chỉ mở cửa tháng 5–10. Vé ¥500. Chùa Bodai-ji có suối nước nóng onsen miễn phí. Lễ hội Itako Taisai (tháng 7) là khi các đồng cốt giao tiếp với người chết. Hẻo lánh nhưng đáng để đi.</p>
         </div>
     </div>
+</section>
 
-    <!-- Tōno -->
-    <div class="place">
-        <div class="place-image">
-            <img src="https://images.unsplash.com/photo-1542640244-7e672d6cef4e?w=800&q=80" alt="Nông thôn Nhật Bản">
-            <div class="overlay">Tỉnh Iwate</div>
-        </div>
-        <div class="place-info">
-            <h3>Tōno — Thung Lũng Kappa</h3>
-            <div class="jp-name">遠野 — Nơi Truyền Thuyết Là Thật</div>
-            <div class="location">📍 Thành phố Tōno, Tỉnh Iwate</div>
-            <p>Một thung lũng nông thôn nơi truyền thuyết Nhật Bản không phải chuyện kể — mà là cuộc sống hàng ngày. Đây là quê hương của <em>Tōno Monogatari</em> (1910), bộ sưu tập truyện dân gian Nhật Bản quan trọng nhất từng được xuất bản. Người dân địa phương vẫn để dưa chuột ở bờ sông cho <em>kappa</em> (quỷ nước).</p>
-            <p>Thung lũng rải rác các đền thờ <em>oshira-sama</em> (thần gậy dâu tằm quấn vải), <em>zashiki-warashi</em> (ma trẻ em ám nhà mang lại may mắn), và hồ <em>kappa</em> nơi các sinh vật nước được cho là sinh sống. Không phải làm màu cho du khách — đây là truyền thuyết sống thực sự.</p>
-            <div class="visit-info">
-                <strong>Tham Quan</strong>
-                <p>Thuê xe đạp khám phá thung lũng. Ghé thăm hồ Kappa-buchi, Bảo tàng Dân gian Tōno, và vườn Denshōen. Ở lại nhà nông truyền thống (<em>magariya</em>). Lễ hội Tōno Matsuri tháng 9 làm sống lại truyền thuyết. 2-3 giờ từ Morioka bằng tàu.</p>
-            </div>
-            <div class="tags">
-                <span class="tag">truyền thuyết</span>
-                <span class="tag">kappa</span>
-                <span class="tag">nông thôn</span>
-                <span class="tag">xe đạp</span>
-                <span class="tag">truyền thống sống</span>
-            </div>
+<!-- TŌNO -->
+<section class="slide" id="tono">
+    <div class="slide-bg">
+        <img src="https://images.unsplash.com/photo-1542640244-7e672d6cef4e?w=1200&q=80" alt="Nông thôn Nhật Bản">
+    </div>
+    <div class="slide-content">
+        <div class="category">Tỉnh Iwate · Siêu Nhiên</div>
+        <h2>Thung Lũng Tōno</h2>
+        <div class="jp-name">遠野 — Nơi Truyền Thuyết Là Thật</div>
+        <div class="location">📍 Thành phố Tōno, Iwate</div>
+        <p>Một thung lũng nông thôn nơi truyền thuyết Nhật Bản không phải chuyện kể — mà là cuộc sống hàng ngày. Đây là quê hương của Tōno Monogatari (1910), bộ sưu tập truyện dân gian quan trọng nhất Nhật Bản. Người dân địa phương vẫn để dưa chuột ở bờ sông cho kappa — quỷ nước.</p>
+        <p>Thung lũng rải rác các đền thờ oshira-sama, zashiki-warashi (ma trẻ em ám nhà mang lại may mắn), và hồ kappa nơi các sinh vật nước được cho là sinh sống. Không phải làm màu cho du khách — đây là truyền thuyết sống thực sự.</p>
+        <div class="visit-box">
+            <strong>Tham Quan</strong>
+            <p>Thuê xe đạp khám phá thung lũng. Ghé hồ Kappa-buchi, Bảo tàng Dân gian Tōno, và vườn Denshōen. Ở lại nhà nông truyền thống (magariya). 2–3 giờ từ Morioka bằng tàu.</p>
         </div>
     </div>
 </section>
@@ -702,71 +726,71 @@
 <section class="map-section" id="map">
     <h2>Theo Vùng</h2>
     <div class="map-grid">
-        <div class="map-card">
-            <div class="region">Tōhoku (Phía Bắc)</div>
+        <a class="map-card" href="#osore">
+            <div class="region">Tōhoku — Phía Bắc</div>
             <h4>Núi Osore</h4>
             <p>Cổng vào âm phủ. Núi lửa, hẻo lánh, không thể quên.</p>
-        </div>
-        <div class="map-card">
-            <div class="region">Tōhoku (Phía Bắc)</div>
+        </a>
+        <a class="map-card" href="#tono">
+            <div class="region">Tōhoku — Phía Bắc</div>
             <h4>Thung Lũng Tōno</h4>
             <p>Truyền thuyết sống. Kappa, ma, và những câu chuyện cổ.</p>
-        </div>
-        <div class="map-card">
-            <div class="region">Tōhoku (Phía Bắc)</div>
+        </a>
+        <a class="map-card" href="#matsuo">
+            <div class="region">Tōhoku — Phía Bắc</div>
             <h4>Mỏ Matsuo</h4>
             <p>Phế tích bê tông hiện ra từ sương mù trên núi.</p>
-        </div>
-        <div class="map-card">
+        </a>
+        <a class="map-card" href="#aokigahara">
             <div class="region">Kantō</div>
             <h4>Aokigahara</h4>
             <p>Biển Cây dưới chân núi Phú Sĩ.</p>
-        </div>
-        <div class="map-card">
+        </a>
+        <a class="map-card" href="#nichitsu">
             <div class="region">Kantō</div>
             <h4>Thị Trấn Ma Nichitsu</h4>
             <p>Thị trấn mỏ bỏ hoang, 3 giờ từ Tokyo.</p>
-        </div>
-        <div class="map-card">
+        </a>
+        <a class="map-card" href="#nara">
             <div class="region">Kansai</div>
             <h4>Nara Dreamland</h4>
             <p>Disneyland chết. Đã phá dỡ, nhưng huyền thoại.</p>
-        </div>
-        <div class="map-card">
+        </a>
+        <a class="map-card" href="#okunoshima">
             <div class="region">Chūgoku</div>
             <h4>Ōkunoshima</h4>
             <p>Thỏ dễ thương. Nhà máy khí độc bí mật. Cả hai đều thật.</p>
-        </div>
-        <div class="map-card">
+        </a>
+        <a class="map-card" href="#hashima">
             <div class="region">Kyūshū</div>
             <h4>Đảo Hashima</h4>
             <p>Đảo Chiến Hạm. Hang ổ phản diện Bond. Thành phố ma.</p>
-        </div>
-        <div class="map-card">
+        </a>
+        <a class="map-card" href="#inunaki">
             <div class="region">Kyūshū</div>
             <h4>Làng Inunaki</h4>
             <p>Làng Chó Tru. Truyền thuyết đô thị đáng sợ nhất Nhật Bản.</p>
-        </div>
+        </a>
     </div>
 </section>
 
 <!-- ==================== MẸO DU LỊCH ==================== -->
-<section class="tips" id="tips">
+<section class="tips-section" id="tips">
     <h2>Trước Khi Đi</h2>
 
     <div class="tip">
         <div class="tip-icon">⚠️</div>
         <div>
             <h4>Tôn Trọng Các Địa Điểm</h4>
-            <p>Nhiều nơi trong số này là linh thiêng, nguy hiểm, hoặc cả hai. Đừng làm du khách chụp selfie ở đài tưởng niệm. Một số địa điểm có lịch sử đen tối thật sự liên quan đến người thật.</p>
+            <p>Nhiều nơi là linh thiêng, nguy hiểm, hoặc cả hai. Đừng làm du khách chụp selfie ở đài tưởng niệm. Một số địa điểm có lịch sử đen tối thật sự liên quan đến người thật.</p>
         </div>
     </div>
 
     <div class="tip">
         <div class="tip-icon">🗣️</div>
         <div>
-            <h4>Rào Cản Ngôn Ngữ Là Thật</h4>
-            <p>Đây không phải điểm du lịch nổi tiếng. Biển báo tiếng Anh rất hiếm. Học một vài câu tiếng Nhật cơ bản hoặc mang theo ứng dụng dịch. Chế độ camera của Google Translate là bạn đồng hành tốt nhất.</p>
+            <h4>Rào Cản Ngôn Ngữ</h4>
+            <p>Đây không phải điểm du lịch nổi tiếng. Biển báo tiếng Anh rất hiếm. Học vài câu tiếng Nhật cơ bản hoặc dùng Google Translate chế độ camera.</p>
         </div>
     </div>
 
@@ -774,15 +798,15 @@
         <div class="tip-icon">🚗</div>
         <div>
             <h4>Bạn Sẽ Cần Ô Tô</h4>
-            <p>Hầu hết các nơi này nằm ngoài tuyến tàu. Thuê ô tô — đường Nhật Bản rất tốt, GPS hoạt động tốt, và lái xe nông thôn rất dễ. Xin Giấy phép Lái xe Quốc tế trước khi đi.</p>
+            <p>Hầu hết các nơi này nằm ngoài tuyến tàu. Thuê ô tô — đường Nhật Bản rất tốt, GPS hoạt động tốt. Xin Giấy phép Lái xe Quốc tế trước khi đi.</p>
         </div>
     </div>
 
     <div class="tip">
         <div class="tip-icon">📱</div>
         <div>
-            <h4>Thuê Pocket WiFi</h4>
-            <p>Sóng điện thoại yếu ở vùng núi. Một bộ phát WiFi bỏ túi (thuê ở sân bay) giữ bạn kết nối. Tải bản đồ offline cho các khu vực như Nichitsu và Inunaki.</p>
+            <h4>Pocket WiFi</h4>
+            <p>Sóng điện thoại yếu ở vùng núi. Thuê bộ phát WiFi bỏ túi ở sân bay. Tải bản đồ offline cho các khu vực hẻo lánh.</p>
         </div>
     </div>
 
@@ -790,15 +814,15 @@
         <div class="tip-icon">🏚️</div>
         <div>
             <h4>Phép Lịch Sự Haikyo</h4>
-            <p>Cộng đồng khám phá đô thị ở Nhật rất nghiêm túc. Không đột nhập vào tòa nhà. Không lấy đồ kỷ niệm. Không đăng công khai vị trí của những điểm ẩn. Chỉ mang theo ảnh, chỉ để lại dấu chân.</p>
+            <p>Không đột nhập. Không lấy đồ kỷ niệm. Không đăng công khai vị trí ẩn. Chỉ mang theo ảnh, chỉ để lại dấu chân.</p>
         </div>
     </div>
 
     <div class="tip">
         <div class="tip-icon">🌧️</div>
         <div>
-            <h4>Thời Tiết Rất Quan Trọng</h4>
-            <p>Những nơi này ấn tượng gấp 10 lần trong sương mù, mưa, hoặc trời âm u. Kiểm tra dự báo thời tiết và lên kế hoạch. Núi Osore chỉ mở tháng 5-10. Mỏ Matsuo đẹp nhất vào mùa thu.</p>
+            <h4>Thời Tiết Quan Trọng</h4>
+            <p>Những nơi này ấn tượng gấp 10 lần trong sương mù hoặc mưa. Núi Osore chỉ mở tháng 5–10. Mỏ Matsuo đẹp nhất vào mùa thu.</p>
         </div>
     </div>
 </section>
@@ -810,41 +834,71 @@
     <p style="margin-top: 0.5rem;">Du lịch có trách nhiệm. Tôn trọng người sống và người chết.</p>
 </footer>
 
-<!-- SPOOKY MUSIC -->
-<div id="music-toggle" style="
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    z-index: 999;
-    width: 50px;
-    height: 50px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.5rem;
-    transition: border-color 0.3s, transform 0.2s;
-    user-select: none;
-" onclick="toggleMusic()">🔇</div>
+</div><!-- /content-wrapper -->
+
+<!-- MUSIC BUTTON -->
+<div id="music-toggle" onclick="toggleMusic()">🔇</div>
 
 <script>
-// Death Note - Ls Theme A - "L's Theme A" recreation via Web Audio API
-// Eerie pizzicato strings + haunting melody + dark atmosphere
+// ===== SCROLL-REACTIVE OMBRE =====
+const ombreEl = document.getElementById('ombreScroll');
+let ticking = false;
+
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        requestAnimationFrame(() => {
+            const scrollPercent = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+            const pinkIntensity = Math.sin(scrollPercent * Math.PI) * 0.12;
+            const yPos = 30 + scrollPercent * 50;
+            ombreEl.style.background = `radial-gradient(ellipse at 50% ${yPos}%, rgba(212, 99, 122, ${pinkIntensity}) 0%, transparent 60%)`;
+            ticking = false;
+        });
+        ticking = true;
+    }
+});
+
+// ===== SLIDE REVEAL ON SCROLL =====
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.slide-content').forEach(el => observer.observe(el));
+
+// ===== ACTIVE TOC HIGHLIGHT =====
+const tocLinks = document.querySelectorAll('.toc a');
+const sections = [];
+tocLinks.forEach(link => {
+    const id = link.getAttribute('href').slice(1);
+    const section = document.getElementById(id);
+    if (section) sections.push({ link, section });
+});
+
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(({ link, section }) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 200) current = link.getAttribute('href').slice(1);
+    });
+    tocLinks.forEach(l => l.classList.remove('active'));
+    const activeLink = document.querySelector(`.toc a[href="#${current}"]`);
+    if (activeLink) activeLink.classList.add('active');
+});
+
+// ===== MUSIC: L's Theme A =====
 let audioCtx, masterGain, isPlaying = false, loopTimeout, allNodes = [];
 
 function stopAllAudio() {
-    // Clear ALL timeouts (nuclear option)
+    isPlaying = false;
     if (loopTimeout) { clearTimeout(loopTimeout); loopTimeout = null; }
-    // Kill every tracked node
     for (let i = 0; i < allNodes.length; i++) {
         try { allNodes[i].stop(0); } catch(e) {}
         try { allNodes[i].disconnect(); } catch(e) {}
     }
     allNodes = [];
-    // Close the audio context entirely — this kills everything
     if (audioCtx && audioCtx.state !== 'closed') {
         try { audioCtx.close(); } catch(e) {}
     }
@@ -853,14 +907,10 @@ function stopAllAudio() {
 }
 
 function createLThemeA() {
-    stopAllAudio();
-    if (!isPlaying) return;
-    
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
     masterGain.gain.value = 0.45;
-    
-    // Reverb
+
     const convolver = audioCtx.createConvolver();
     const reverbLen = audioCtx.sampleRate * 3;
     const reverbBuf = audioCtx.createBuffer(2, reverbLen, audioCtx.sampleRate);
@@ -871,207 +921,124 @@ function createLThemeA() {
         }
     }
     convolver.buffer = reverbBuf;
-    
+
     const dryGain = audioCtx.createGain();
     const wetGain = audioCtx.createGain();
     dryGain.gain.value = 0.6;
     wetGain.gain.value = 0.5;
-    
     dryGain.connect(masterGain);
     convolver.connect(wetGain);
     wetGain.connect(masterGain);
     masterGain.connect(audioCtx.destination);
 
-    // Pizzicato string pluck
-    function playPizzicato(freq, startTime, velocity = 0.25) {
-        if (!audioCtx || !isPlaying) return;
+    function playPizzicato(freq, startTime, velocity) {
+        if (!isPlaying || !audioCtx) return;
         const osc = audioCtx.createOscillator();
         const osc2 = audioCtx.createOscillator();
         const g = audioCtx.createGain();
         const filter = audioCtx.createBiquadFilter();
-        
-        osc.type = 'triangle';
-        osc.frequency.value = freq;
-        osc2.type = 'sine';
-        osc2.frequency.value = freq * 2;
-        
+        osc.type = 'triangle'; osc.frequency.value = freq;
+        osc2.type = 'sine'; osc2.frequency.value = freq * 2;
         filter.type = 'lowpass';
         filter.frequency.setValueAtTime(freq * 6, startTime);
         filter.frequency.exponentialRampToValueAtTime(freq * 1.5, startTime + 0.15);
-        
         g.gain.setValueAtTime(0, startTime);
         g.gain.linearRampToValueAtTime(velocity, startTime + 0.005);
         g.gain.exponentialRampToValueAtTime(velocity * 0.3, startTime + 0.08);
         g.gain.exponentialRampToValueAtTime(0.001, startTime + 0.5);
-        
-        osc.connect(filter);
-        osc2.connect(filter);
-        filter.connect(g);
-        g.connect(dryGain);
-        g.connect(convolver);
-        osc.start(startTime);
-        osc2.start(startTime);
-        osc.stop(startTime + 0.6);
-        osc2.stop(startTime + 0.6);
+        osc.connect(filter); osc2.connect(filter);
+        filter.connect(g); g.connect(dryGain); g.connect(convolver);
+        osc.start(startTime); osc2.start(startTime);
+        osc.stop(startTime + 0.6); osc2.stop(startTime + 0.6);
         allNodes.push(osc, osc2);
     }
 
-    // Sustained eerie string
-    function playString(freq, startTime, duration, velocity = 0.12) {
-        if (!audioCtx || !isPlaying) return;
+    function playString(freq, startTime, duration, velocity) {
+        if (!isPlaying || !audioCtx) return;
         const osc = audioCtx.createOscillator();
         const osc2 = audioCtx.createOscillator();
         const g = audioCtx.createGain();
         const vibrato = audioCtx.createOscillator();
-        const vibratoGain = audioCtx.createGain();
-        
-        osc.type = 'sawtooth';
-        osc.frequency.value = freq;
-        osc2.type = 'sawtooth';
-        osc2.frequency.value = freq * 1.002; // Slight detune for richness
-        
-        // Vibrato
-        vibrato.type = 'sine';
-        vibrato.frequency.value = 5;
-        vibratoGain.gain.value = 3;
-        vibrato.connect(vibratoGain);
-        vibratoGain.connect(osc.frequency);
-        vibratoGain.connect(osc2.frequency);
-        
+        const vGain = audioCtx.createGain();
+        osc.type = 'sawtooth'; osc.frequency.value = freq;
+        osc2.type = 'sawtooth'; osc2.frequency.value = freq * 1.002;
+        vibrato.type = 'sine'; vibrato.frequency.value = 5;
+        vGain.gain.value = 3;
+        vibrato.connect(vGain); vGain.connect(osc.frequency); vGain.connect(osc2.frequency);
         const filter = audioCtx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.value = freq * 3;
-        filter.Q.value = 1;
-        
+        filter.type = 'lowpass'; filter.frequency.value = freq * 3; filter.Q.value = 1;
         g.gain.setValueAtTime(0, startTime);
         g.gain.linearRampToValueAtTime(velocity, startTime + 0.2);
         g.gain.setValueAtTime(velocity, startTime + duration - 0.3);
         g.gain.linearRampToValueAtTime(0.001, startTime + duration);
-        
-        osc.connect(filter);
-        osc2.connect(filter);
-        filter.connect(g);
-        g.connect(dryGain);
-        g.connect(convolver);
-        vibrato.start(startTime);
-        osc.start(startTime);
-        osc2.start(startTime);
-        vibrato.stop(startTime + duration + 0.1);
-        osc.stop(startTime + duration + 0.1);
-        osc2.stop(startTime + duration + 0.1);
+        osc.connect(filter); osc2.connect(filter);
+        filter.connect(g); g.connect(dryGain); g.connect(convolver);
+        vibrato.start(startTime); osc.start(startTime); osc2.start(startTime);
+        vibrato.stop(startTime + duration + 0.1); osc.stop(startTime + duration + 0.1); osc2.stop(startTime + duration + 0.1);
         allNodes.push(osc, osc2, vibrato);
     }
 
-    // Deep bass pulse
-    function playBass(freq, startTime, duration, velocity = 0.18) {
-        if (!audioCtx || !isPlaying) return;
+    function playBass(freq, startTime, duration, velocity) {
+        if (!isPlaying || !audioCtx) return;
         const osc = audioCtx.createOscillator();
         const g = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-        
+        osc.type = 'sine'; osc.frequency.value = freq;
         g.gain.setValueAtTime(0, startTime);
         g.gain.linearRampToValueAtTime(velocity, startTime + 0.05);
         g.gain.exponentialRampToValueAtTime(velocity * 0.5, startTime + 0.3);
         g.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
-        
-        osc.connect(g);
-        g.connect(dryGain);
-        osc.start(startTime);
-        osc.stop(startTime + duration + 0.1);
+        osc.connect(g); g.connect(dryGain);
+        osc.start(startTime); osc.stop(startTime + duration + 0.1);
         allNodes.push(osc);
     }
 
     const N = {
-        A2: 110.00, B2: 123.47, C3: 130.81, D3: 146.83, Eb3: 155.56, E3: 164.81, F3: 174.61, 
-        Fsh3: 185.00, G3: 196.00, Ab3: 207.65, A3: 220.00, Bb3: 233.08, B3: 246.94,
-        C4: 261.63, D4: 293.66, Eb4: 311.13, E4: 329.63, F4: 349.23, Fsh4: 369.99, 
-        G4: 392.00, Ab4: 415.30, A4: 440.00, Bb4: 466.16, B4: 493.88,
-        C5: 523.25, D5: 587.33, Eb5: 622.25, E5: 659.26, F5: 698.46, G5: 783.99, Ab5: 830.61
+        A2:110, B2:123.47, C3:130.81, D3:146.83, Eb3:155.56, E3:164.81, F3:174.61,
+        G3:196, Ab3:207.65, A3:220, Bb3:233.08, B3:246.94,
+        C4:261.63, D4:293.66, Eb4:311.13, E4:329.63, F4:349.23,
+        G4:392, Ab4:415.3, A4:440, Bb4:466.16, B4:493.88,
+        C5:523.25, D5:587.33, Eb5:622.25, E5:659.26, F5:698.46, G5:783.99
     };
 
     function playSequence() {
         if (!isPlaying || !audioCtx) return;
         const t = audioCtx.currentTime + 0.1;
-        const bpm = 80;
-        const q = 60 / bpm;     // quarter note
-        const e = q / 2;        // eighth note
-        const h = q * 2;        // half note
-        const w = q * 4;        // whole note
+        const q = 60 / 80; const e = q / 2; const w = q * 4; const h = q * 2;
 
-        // === L's Theme A: Pizzicato pattern (the iconic plucking) ===
-        // Rhythmic pizzicato ostinato in Am
         const pizz = [
-            // Bar 1-2: Iconic opening pattern
-            [N.E4, 0], [N.B3, e], [N.E4, e*2], [N.A3, e*3],
-            [N.E4, q*2], [N.B3, q*2+e], [N.E4, q*3], [N.A3, q*3+e],
-            [N.E4, q*4], [N.C4, q*4+e], [N.E4, q*5], [N.A3, q*5+e],
-            [N.E4, q*6], [N.C4, q*6+e], [N.E4, q*7], [N.B3, q*7+e],
-            
-            // Bar 3-4: Variation
-            [N.E4, q*8], [N.B3, q*8+e], [N.E4, q*9], [N.A3, q*9+e],
-            [N.F4, q*10], [N.C4, q*10+e], [N.E4, q*11], [N.B3, q*11+e],
-            [N.E4, q*12], [N.A3, q*12+e], [N.D4, q*13], [N.A3, q*13+e],
-            [N.E4, q*14], [N.B3, q*14+e], [N.E4, q*15], [N.A3, q*15+e],
-            
-            // Bar 5-6: Building
-            [N.E4, q*16], [N.C4, q*16+e], [N.F4, q*17], [N.C4, q*17+e],
-            [N.E4, q*18], [N.B3, q*18+e], [N.E4, q*19], [N.Ab3, q*19+e],
-            [N.E4, q*20], [N.B3, q*20+e], [N.E4, q*21], [N.A3, q*21+e],
-            [N.E4, q*22], [N.C4, q*22+e], [N.E4, q*23], [N.B3, q*23+e],
-            
-            // Bar 7-8: Tension
-            [N.F4, q*24], [N.C4, q*24+e], [N.F4, q*25], [N.D4, q*25+e],
-            [N.E4, q*26], [N.B3, q*26+e], [N.E4, q*27], [N.Ab3, q*27+e],
-            [N.E4, q*28], [N.A3, q*28+e], [N.E4, q*29], [N.B3, q*29+e],
-            [N.E4, q*30], [N.C4, q*30+e], [N.D4, q*31], [N.A3, q*31+e],
+            [N.E4,0],[N.B3,e],[N.E4,e*2],[N.A3,e*3],
+            [N.E4,q*2],[N.B3,q*2+e],[N.E4,q*3],[N.A3,q*3+e],
+            [N.E4,q*4],[N.C4,q*4+e],[N.E4,q*5],[N.A3,q*5+e],
+            [N.E4,q*6],[N.C4,q*6+e],[N.E4,q*7],[N.B3,q*7+e],
+            [N.E4,q*8],[N.B3,q*8+e],[N.E4,q*9],[N.A3,q*9+e],
+            [N.F4,q*10],[N.C4,q*10+e],[N.E4,q*11],[N.B3,q*11+e],
+            [N.E4,q*12],[N.A3,q*12+e],[N.D4,q*13],[N.A3,q*13+e],
+            [N.E4,q*14],[N.B3,q*14+e],[N.E4,q*15],[N.A3,q*15+e],
+            [N.E4,q*16],[N.C4,q*16+e],[N.F4,q*17],[N.C4,q*17+e],
+            [N.E4,q*18],[N.B3,q*18+e],[N.E4,q*19],[N.Ab3,q*19+e],
+            [N.E4,q*20],[N.B3,q*20+e],[N.E4,q*21],[N.A3,q*21+e],
+            [N.E4,q*22],[N.C4,q*22+e],[N.E4,q*23],[N.B3,q*23+e],
+            [N.F4,q*24],[N.C4,q*24+e],[N.F4,q*25],[N.D4,q*25+e],
+            [N.E4,q*26],[N.B3,q*26+e],[N.E4,q*27],[N.Ab3,q*27+e],
+            [N.E4,q*28],[N.A3,q*28+e],[N.E4,q*29],[N.B3,q*29+e],
+            [N.E4,q*30],[N.C4,q*30+e],[N.D4,q*31],[N.A3,q*31+e],
         ];
+        pizz.forEach(([freq, time]) => playPizzicato(freq, t + time, 0.22));
 
-        pizz.forEach(([freq, time]) => {
-            playPizzicato(freq, t + time, 0.22);
-        });
-
-        // === Eerie sustained strings (melody) ===
         const strings = [
-            // Haunting melody over pizzicato
-            [N.E5, q*4, w, 0.1],
-            [N.D5, q*8, h, 0.1],
-            [N.C5, q*10, h, 0.1],
-            [N.B4, q*12, w, 0.1],
-            
-            [N.C5, q*16, h, 0.11],
-            [N.D5, q*18, h, 0.11],
-            [N.E5, q*20, w, 0.12],
-            
-            [N.F5, q*24, h, 0.13],
-            [N.E5, q*26, h, 0.12],
-            [N.D5, q*28, h, 0.11],
-            [N.C5, q*30, h, 0.1],
+            [N.E5,q*4,w,0.1],[N.D5,q*8,h,0.1],[N.C5,q*10,h,0.1],[N.B4,q*12,w,0.1],
+            [N.C5,q*16,h,0.11],[N.D5,q*18,h,0.11],[N.E5,q*20,w,0.12],
+            [N.F5,q*24,h,0.13],[N.E5,q*26,h,0.12],[N.D5,q*28,h,0.11],[N.C5,q*30,h,0.1],
         ];
+        strings.forEach(([freq, time, dur, vel]) => playString(freq, t + time, dur, vel));
 
-        strings.forEach(([freq, time, dur, vel]) => {
-            playString(freq, t + time, dur, vel);
-        });
-
-        // === Deep bass ===
         const bass = [
-            [N.A2, 0, w, 0.16],
-            [N.A2, q*4, w, 0.16],
-            [N.F3, q*8, w, 0.14],
-            [N.E3, q*12, w, 0.15],
-            [N.A2, q*16, w, 0.16],
-            [N.F3, q*20, w, 0.14],
-            [N.D3, q*24, w, 0.15],
-            [N.A2, q*28, w, 0.16],
+            [N.A2,0,w,0.16],[N.A2,q*4,w,0.16],[N.F3,q*8,w,0.14],[N.E3,q*12,w,0.15],
+            [N.A2,q*16,w,0.16],[N.F3,q*20,w,0.14],[N.D3,q*24,w,0.15],[N.A2,q*28,w,0.16],
         ];
+        bass.forEach(([freq, time, dur, vel]) => playBass(freq, t + time, dur, vel));
 
-        bass.forEach(([freq, time, dur, vel]) => {
-            playBass(freq, t + time, dur, vel);
-        });
-
-        // Loop
-        const totalDuration = q * 32;
-        loopTimeout = setTimeout(() => playSequence(), totalDuration * 1000);
+        loopTimeout = setTimeout(() => playSequence(), q * 32 * 1000);
     }
 
     playSequence();
@@ -1080,28 +1047,19 @@ function createLThemeA() {
 function toggleMusic() {
     const btn = document.getElementById('music-toggle');
     if (!isPlaying) {
-        // STOP everything first to be safe (in case of leftover audio)
         stopAllAudio();
         isPlaying = true;
         createLThemeA();
         btn.textContent = '🔊';
-        btn.style.borderColor = '#c41e3a';
-        btn.style.boxShadow = '0 0 20px rgba(196, 30, 58, 0.3)';
+        btn.style.borderColor = 'rgba(212, 99, 122, 0.5)';
+        btn.style.boxShadow = '0 0 20px rgba(212, 99, 122, 0.2)';
     } else {
-        // STOP: set flag FIRST so nothing new schedules
-        isPlaying = false;
-        // Then nuke everything
         stopAllAudio();
         btn.textContent = '🔇';
-        btn.style.borderColor = '#222';
+        btn.style.borderColor = 'rgba(212, 99, 122, 0.15)';
         btn.style.boxShadow = 'none';
     }
 }
-
-// Pulse animation on the button to draw attention
-const btn = document.getElementById('music-toggle');
-btn.addEventListener('mouseenter', () => { btn.style.transform = 'scale(1.1)'; });
-btn.addEventListener('mouseleave', () => { btn.style.transform = 'scale(1)'; });
 </script>
 
 </body>
