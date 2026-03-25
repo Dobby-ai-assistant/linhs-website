@@ -836,14 +836,20 @@
 let audioCtx, masterGain, isPlaying = false, loopTimeout, allNodes = [];
 
 function stopAllAudio() {
+    // Clear ALL timeouts (nuclear option)
     if (loopTimeout) { clearTimeout(loopTimeout); loopTimeout = null; }
-    allNodes.forEach(n => { try { n.stop(); } catch(e) {} try { n.disconnect(); } catch(e) {} });
-    allNodes = [];
-    if (audioCtx) {
-        audioCtx.close().catch(() => {});
-        audioCtx = null;
-        masterGain = null;
+    // Kill every tracked node
+    for (let i = 0; i < allNodes.length; i++) {
+        try { allNodes[i].stop(0); } catch(e) {}
+        try { allNodes[i].disconnect(); } catch(e) {}
     }
+    allNodes = [];
+    // Close the audio context entirely — this kills everything
+    if (audioCtx && audioCtx.state !== 'closed') {
+        try { audioCtx.close(); } catch(e) {}
+    }
+    audioCtx = null;
+    masterGain = null;
 }
 
 function createLThemeA() {
@@ -878,7 +884,7 @@ function createLThemeA() {
 
     // Pizzicato string pluck
     function playPizzicato(freq, startTime, velocity = 0.25) {
-        if (!audioCtx) return;
+        if (!audioCtx || !isPlaying) return;
         const osc = audioCtx.createOscillator();
         const osc2 = audioCtx.createOscillator();
         const g = audioCtx.createGain();
@@ -912,7 +918,7 @@ function createLThemeA() {
 
     // Sustained eerie string
     function playString(freq, startTime, duration, velocity = 0.12) {
-        if (!audioCtx) return;
+        if (!audioCtx || !isPlaying) return;
         const osc = audioCtx.createOscillator();
         const osc2 = audioCtx.createOscillator();
         const g = audioCtx.createGain();
@@ -958,7 +964,7 @@ function createLThemeA() {
 
     // Deep bass pulse
     function playBass(freq, startTime, duration, velocity = 0.18) {
-        if (!audioCtx) return;
+        if (!audioCtx || !isPlaying) return;
         const osc = audioCtx.createOscillator();
         const g = audioCtx.createGain();
         osc.type = 'sine';
@@ -1074,13 +1080,17 @@ function createLThemeA() {
 function toggleMusic() {
     const btn = document.getElementById('music-toggle');
     if (!isPlaying) {
+        // STOP everything first to be safe (in case of leftover audio)
+        stopAllAudio();
         isPlaying = true;
         createLThemeA();
         btn.textContent = '🔊';
         btn.style.borderColor = '#c41e3a';
         btn.style.boxShadow = '0 0 20px rgba(196, 30, 58, 0.3)';
     } else {
+        // STOP: set flag FIRST so nothing new schedules
         isPlaying = false;
+        // Then nuke everything
         stopAllAudio();
         btn.textContent = '🔇';
         btn.style.borderColor = '#222';
